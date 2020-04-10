@@ -1,22 +1,21 @@
-require('dotenv').config();
-const server = require('./server.js');
-const projects = require('./projects/projectsRouter');
-const actions = require('./actions/actionsRouter');
 
-const port = process.env.PORT || 4000;
+const express = require("express");
+const actionRouter = require("./data/helpers/actionRouter.js");
+const projectRouter = require("./data/helpers/projectRouter.js");
 
-server.use('/api/projects', projects);
-server.use('/api/actions', actions);
+const server = express();
+server.use(express.json());
 
-server.listen(port, () => {
-    console.log(`\n* Server Running on http://localhost:${port} *\n`);
-});
+server.use("/api/actions", actionRouter);
+server.use("/api/projects", projectRouter);
 
 server.get('/', (req, res) => {
-  const motd = process.env.MOTD;
-  res.status(200).json({motd: motd}) 
-});
+    res.send(`<h1> node-api-challenge</h1>`);
+  });
 
+server.listen(5000, () => {
+     console.log("It\'s Working on Port: 5000!")
+});
 
 
 
