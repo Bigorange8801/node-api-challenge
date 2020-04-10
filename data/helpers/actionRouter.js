@@ -67,14 +67,9 @@ router.put("/:id", validateActionId, validateAction, (req, res) => {
     });
 });
 
-router.post(
-  "/:id/actions",
-  validateActionForPost,
-  validateActionId,
-  (req, res) => {
+router.post("/:id",validateAction,(req, res) => {
     const newAction = req.body;
-
-    Project.insert(newAction)
+    Action.insert(newAction)
       .then((action) => {
         res.status(201).json(action);
       })
@@ -133,19 +128,25 @@ function validateActionForPost(req, res, next) {
 }
 
 function validateAction(req, res, next) {
-  const { id } = req.params;
-  const { description, notes } = req.body;
+//   const { id } = req.params;
+//   const { description, notes } = req.body;
 
-  if (!req.body) {
-    return res.status(400).json({ errorMessage: "Text is not empty" });
-  }
-  if (description.length > 128) {
-    return res.status(400).json({ errorMessage: "Must be this long" });
-  }
-  if (!notes) {
-    return res.status(400).json({ errorMessage: "Notes here" });
-  }
-  req.body = { id, description, notes };
-  next();
+//   if (!req.body) {
+//     return res.status(400).json({ errorMessage: "Text is not empty" });
+//   }
+//   if (description.length > 128) {
+//     return res.status(400).json({ errorMessage: "Must be this long" });
+//   }
+//   if (!notes) {
+//     return res.status(400).json({ errorMessage: "Notes here" });
+//   }
+//   req.body = { id, description, notes };
+//   next();
+
+if(req.body.project_id && req.body.description && req.body.notes){
+    next()
+}else {
+    return res.status(400).json({ errorMessage: "project id or description or notes missing" });
+}
 }
 module.exports = router;
