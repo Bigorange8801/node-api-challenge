@@ -13,12 +13,12 @@ router.get("/", (req, res) => {
             if(actions.length) {
                 res.status(200).json(actions);
             } else {
-                res.status(404).json({ errorMessage: "Sorry there are no current actions"})
+                res.status(404).json({ errorMessage: "No actions"})
             }
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ errorMessage: "Sorry there was an error retrieving current actions"})
+            res.status(500).json({ errorMessage: "Error getting actions"})
         })
 })
 
@@ -31,12 +31,12 @@ router.get("/:id", (req, res) => {
             if(action) {
                 res.status(200).json(action);
             } else {
-                res.status(404).json({ errorMessage: `Sorry, ID #${req.params.id} does not exist` })
+                res.status(404).json({ errorMessage: ` ID #${req.params.id} does not exist` })
             }
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ errorMessage: `Oops, we couldn't retrieve ID #${req.params.id}'s actions`});
+            res.status(500).json({ errorMessage: `Can not get ID #${req.params.id}'s actions`});
         });
 })
 
@@ -59,7 +59,7 @@ router.put('/:id', validateActionId, validateAction, (req, res) => {
           })
           .catch(err => {
             console.log(err);
-            res.status(500).json({ errorMessage: "Could not update this action" })
+            res.status(500).json({ errorMessage: "Could not update action" })
           })
       });
 
@@ -74,7 +74,7 @@ router.post("/:id/actions",  validateActionForPost, validateActionId, (req, res)
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ errorMessage: "Woops! There was an error while saving this action" });
+            res.status(500).json({ errorMessage: "Saving error" });
         })
      })
 
@@ -82,11 +82,11 @@ router.post("/:id/actions",  validateActionForPost, validateActionId, (req, res)
 router.delete('/:id', validateActionId, (req, res) => {
     Action.remove(req.params.id)
        .then(() => {
-            return res.status(200).json({ message: `Bye Felicia - ID #${req.params.id} is out`})
+            return res.status(200).json({ message: ` Client ${req.params.id} is gone `})
         })
         .catch(err => {
            console.log(err);
-           res.status(500).json({ errorMessage: `You are stuck with ID #${id}, deal with it` });
+           res.status(500).json({ errorMessage: ` You are ${id} !` });
         })
      });     
 
@@ -113,13 +113,13 @@ function validateActionForPost(req, res, next) {
     const {description, notes} = req.body;
    
     if (!req.body) {
-       return res.status(400).json({errorMessage: "Text fields cannot be empty" });
+       return res.status(400).json({errorMessage: "Text is not empty" });
     }
     if (description.length > 128) {
-        return res.status(400).json({errorMessage: "Please limit characters to 128" });
+        return res.status(400).json({errorMessage: "Must be this long" });
     }
     if (!notes) {
-        return res.status(400).json({errorMessage: "Notes field cannot be empty" });
+        return res.status(400).json({errorMessage: "notes here" });
     }
     req.body = {project_id, description, notes};
     next();
@@ -131,13 +131,13 @@ function validateActionForPost(req, res, next) {
     const {description, notes} = req.body;
    
     if (!req.body) {
-       return res.status(400).json({errorMessage: "Text fields cannot be empty" });
+       return res.status(400).json({errorMessage: "Text is not empty" });
     }
     if (description.length > 128) {
-        return res.status(400).json({errorMessage: "Please limit characters to 128" });
+        return res.status(400).json({errorMessage: "Must be this long" });
     }
     if (!notes) {
-        return res.status(400).json({errorMessage: "Notes field cannot be empty" });
+        return res.status(400).json({errorMessage: "Notes here" });
     }
     req.body = {id, description, notes};
     next();

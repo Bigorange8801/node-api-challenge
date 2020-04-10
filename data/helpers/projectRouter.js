@@ -11,12 +11,12 @@ router.get("/", (req, res) => {
           if(projects.length) {
             res.status(200).json(projects);
           } else {
-            res.status(404).json({ errorMessage: "Sorry there are no current projects"})
+            res.status(404).json({ errorMessage: "No projects"})
           }
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ errorMessage: "Sorry there was an error retrieving current projects"})
+            res.status(500).json({ errorMessage: "Error getting projects"})
         })
 })
 
@@ -28,12 +28,12 @@ router.get("/:id", (req, res) => {
             if(project) {
                 res.status(200).json(project);
             } else {
-                res.status(404).json({ errorMessage: `Sorry, ID #${req.params.id} does not exist` })
+                res.status(404).json({ errorMessage: `Client ${req.params.id} does not exist` })
             }
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ errorMessage: `Oops, we couldn't retrieve ID #${req.params.id}'s projects`});
+            res.status(500).json({ errorMessage: `No projects for ${req.params.id}`});
         });
 })
 
@@ -44,14 +44,14 @@ router.get('/:id/actions', validateProjectId, (req, res) => {
     Project.getProjectActions(id)
       .then(projects => {
         if(projects.length === 0) {
-        res.status(400).json({ errorMessage: `Sorry, Project ${req.params.id} has no actions yet`})
+        res.status(400).json({ errorMessage: `Project ${req.params.id} has no action`})
         } else {
         res.status(200).json(projects);
         }
       })
       .catch(err => {
         console.log(err);
-        res.status(500).json({ errorMessage: `Oops, we couldn't retrieve ID #${req.params.id}'s actions` });
+        res.status(500).json({ errorMessage: `Can not get ${req.params.id}'s actions` });
       })
   });
 
@@ -70,13 +70,13 @@ router.put('/:id', validateProjectId, validateProject, (req, res) => {
             })
             .catch(err => {
               console.log(err);
-              res.status(500).json({ errorMessage: `Could not access this project by ID#: ${req.params.id}` });
+              res.status(500).json({ errorMessage: `Could not access this project for ${req.params.id}` });
             })
         }
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json({ errorMessage: "Could not update this project" })
+          res.status(500).json({ errorMessage: "Can not update" })
         })
     });
 
@@ -91,7 +91,7 @@ router.post("/", validateProject, (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({ errorMessage: "Woops! There was an error while saving this project" });
+            res.status(500).json({ errorMessage: "Saving error" });
         })
 })
 
@@ -105,7 +105,7 @@ router.post('/:id/actions', validateProjectId, validateAction, (req, res) => {
         })
         .catch(err => {
           console.log(err);
-          res.status(500).json({ errorMessage: "No new actions for you" })
+          res.status(500).json({ errorMessage: "No action complete" })
         })
       });
 
@@ -113,11 +113,11 @@ router.post('/:id/actions', validateProjectId, validateAction, (req, res) => {
 router.delete('/:id', validateProjectId, (req, res) => {
     Project.remove(req.params.id)
       .then(() => {
-          return res.status(200).json({ message: `Bye Felicia - ID #${req.params.id} is out`})
+          return res.status(200).json({ message: `Client ${req.params.id} is no more`})
       })
       .catch(err => {
         console.log(err);
-        res.status(500).json({ errorMessage: `You are stuck with ID #${id}, deal with it` });
+        res.status(500).json({ errorMessage: `Client ${id}` });
       })
   });
   
@@ -128,7 +128,7 @@ function validateProject(req, res, next) {
     const {name, description} = req.body;
   
     if (description === "" || name === "") {
-      return res.status(400).json({ errorMessage: "Fields cannot be empty" });
+      return res.status(400).json({ errorMessage: "Must have text" });
     }
     req.body = {name, description};
     next();
@@ -143,7 +143,7 @@ function validateProject(req, res, next) {
         req.project = project;
         next();
       } else {
-        res.status(400).json({ errorMessage: `Project ID ${req.params.id} does not exist` })
+        res.status(400).json({ errorMessage: `Client ${req.params.id} does not exist` })
       }
     })
   }
@@ -154,7 +154,7 @@ function validateProject(req, res, next) {
     const {description, notes} = req.body;
    
     if (!req.body || notes === "" && description === "") {
-      return res.status(400).json({errorMessage: "Text fields cannot be empty" });
+      return res.status(400).json({errorMessage: "Must have text" });
     }
     req.body = {project_id, description, notes};
     next();
