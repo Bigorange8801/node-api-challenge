@@ -40,13 +40,24 @@ Demonstrate your understanding of this Sprint's concepts by answering the follow
 
 - [ ] Mention two parts of Express that you learned about this week.
 
+Express sits on top of raw http server module by node. It adds fucntionality, like routing and middleware support.
+
 - [ ] Describe Middleware?
+
+Middleware is software that lies between an operating system and the apllications running it.
+
 
 - [ ] Describe a Resource?
 
+Endpoints that clients can use to manage API software
+
 - [ ] What can the API return to help clients know if a request was successful?
 
+Return 200 to indicate success. 
+
 - [ ] How can we partition our application into sub-applications?
+
+Cloning, Decomposing, and Splitting.
 
 ## Minimum Viable Product
 
