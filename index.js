@@ -1,3 +1,26 @@
+require('dotenv').config();
+const server = require('./server.js');
+const projects = require('./projects/projectsRouter');
+const actions = require('./actions/actionsRouter');
+
+const port = process.env.PORT || 4000;
+
+server.use('/api/projects', projects);
+server.use('/api/actions', actions);
+
+server.listen(port, () => {
+    console.log(`\n* Server Running on http://localhost:${port} *\n`);
+});
+
+server.get('/', (req, res) => {
+  const motd = process.env.MOTD;
+  res.status(200).json({motd: motd}) 
+});
+
+
+
+
+
 /*
 play this: https://www.youtube.com/watch?v=d-diB65scQU
 
