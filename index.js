@@ -1,3 +1,25 @@
+
+const express = require("express");
+const actionRouter = require("./data/helpers/actionRouter.js");
+const projectRouter = require("./data/helpers/projectRouter.js");
+
+const server = express();
+server.use(express.json());
+
+server.use("/api/actions", actionRouter);
+server.use("/api/projects", projectRouter);
+
+server.get('/', (req, res) => {
+    res.send(`<h1> node-api-challenge</h1>`);
+  });
+
+server.listen(5000, () => {
+     console.log("It\'s Working on Port: 5000!")
+});
+
+
+
+
 /*
 play this: https://www.youtube.com/watch?v=d-diB65scQU
 
